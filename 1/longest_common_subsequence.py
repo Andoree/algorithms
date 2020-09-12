@@ -66,7 +66,7 @@ def main():
     print_subsequence_colorful(X, sequence_X_elem_ids)
     print('sequence Y:', end=' ')
     print_subsequence_colorful(Y, sequence_Y_elem_ids)
-    print(f"Greatest common subsequence:\n{X[list(sequence_X_elem_ids)]}")
+    print(f"Longest common subsequence:\n{X[list(sequence_X_elem_ids)]}")
 
 
 if __name__ == '__main__':
