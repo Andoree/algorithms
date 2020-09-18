@@ -28,8 +28,6 @@ def main():
     i = m - 1
     j = n - 1
     while i != 0 or j != 0:
-    # if i == 0 or j == 0:
-        # return
         print(i, j)
         if b_matrix[i][j] == 1:
             longest_com_subseq.append(c_matrix[i + 1][j + 1])
