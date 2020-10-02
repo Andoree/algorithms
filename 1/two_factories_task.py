@@ -24,6 +24,7 @@ def main():
     change_path_costs = [f_0_1, f_1_0]
     change_path_flags = [b_0, b_1]
     aggregated_costs = [c_0_list, c_1_list]
+    # Forward pass, заполняем массивы решения
     for i in range(0, n):
         for j in range(2):
             if i == 0:
@@ -36,6 +37,7 @@ def main():
                 aggregated_costs[j].append(min_cost)
                 change_path_flags[j][i] = True if round_cost < forward_cost else 0
 
+    # Backward pass, восстанавливаем маршрут и стоимости
     optimal_path = []
     initial_node = 0 if aggregated_costs[0][-1] < aggregated_costs[1][-1] else 1
     optimal_path.append((initial_node, -1, 0))
