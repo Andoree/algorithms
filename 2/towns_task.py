@@ -1,7 +1,7 @@
-def traverse_adjacency_list(adjacency_list, initial_node, tmp_stack, possible_ends,):
+def traverse_adjacency_list(adjacency_list, initial_edge, tmp_stack, final_stack, possible_ends, ):
     keep_going = True
+    initial_node = initial_edge
     start_node = initial_node
-    can_add_node = True
     cycle_exists = True
     while keep_going:
         if len(adjacency_list[start_node]) > 0:
@@ -9,6 +9,7 @@ def traverse_adjacency_list(adjacency_list, initial_node, tmp_stack, possible_en
             start_node = adjacency_list[start_node].pop()
         else:
             keep_going = False
+            final_stack.append(start_node)
     if initial_node != start_node:
         possible_ends.append((initial_node, start_node))
 
@@ -17,64 +18,44 @@ def traverse_adjacency_list(adjacency_list, initial_node, tmp_stack, possible_en
 
 def find_towns_sequence(adjacency_list, nodes_with_no_input_edge):
     if len(nodes_with_no_input_edge) > 1:
-        print('here f')
         return [-1, ]
     elif len(nodes_with_no_input_edge) == 1:
         start_node = nodes_with_no_input_edge.pop()
     else:
+        start_node = -1
         for i in range(len(adjacency_list)):
             if len(adjacency_list[i]) % 2 == 1:
-                start_node = adjacency_list[i][0]
-                print(start_node)
+                start_node = i
+            elif len(adjacency_list[i]) > 1 and start_node == -1:
+                start_node = i
                 break
 
-    print('AAAAAAAAA', start_node)
     tmp_stack = [start_node, ]
     final_stack = []
     possible_ends = []
     cycle_exists = True
     while len(tmp_stack) > 0 and cycle_exists:
         start_node = tmp_stack.pop()
-        traverse_adjacency_list(adjacency_list, start_node, tmp_stack, possible_ends)
-        final_stack.append(start_node)
-    print('CYCLE EXISTS', cycle_exists)
-    print(possible_ends)
-    print(final_stack)
-
+        traverse_adjacency_list(adjacency_list, start_node, tmp_stack, final_stack, possible_ends)
     traversed_nodes_set = set(final_stack)
     if len(possible_ends) > 1:
-        print(possible_ends)
-        print(len(possible_ends))
-        print('here a')
         return [-1, ]
     else:
-        print('gdsgsda', possible_ends)
-        traversed_nodes_set.add(possible_ends[0][1])
-        final_stack.insert(0, possible_ends[0][1])
-        print(final_stack)
         if len(adjacency_list) == len(traversed_nodes_set):
-            if len(possible_ends) == 0:
-                return final_stack[:-1]
-            else:
-                print(possible_ends)
-                print(final_stack)
-                print(traversed_nodes_set)
-                print('here d')
-                return final_stack
+            return final_stack
         else:
-            print('--' * 10)
-            print(possible_ends)
-            print(len(adjacency_list))
-            print(len(traversed_nodes_set))
-            print('--')
-            print(adjacency_list)
-            print(traversed_nodes_set)
-            print('here e')
             return [-1, ]
 
 
+def add_town_name(town_edge_name_mappings, town_start_id, town_end_id, town_name):
+    names_list = town_edge_name_mappings[town_start_id].get(town_end_id)
+    if names_list is None:
+        town_edge_name_mappings[town_start_id][town_end_id] = []
+    town_edge_name_mappings[town_start_id][town_end_id].append(town_name)
+
+
 def main():
-    with open("towns_input.txt", 'r', encoding="utf-8") as inp_file:
+    with open("towns_input_with_cycle.txt", 'r', encoding="utf-8") as inp_file:
         letters_set = set()
         letters_with_input_edge = set()
         for line in inp_file:
@@ -89,18 +70,14 @@ def main():
         id_to_letter = {i: letter for i, letter in enumerate(letters_set)}
         letter_to_id = {letter: i for i, letter in id_to_letter.items()}
         nodes_with_no_input_edge = set([letter_to_id[x] for x in letters_with_no_input_edge])
-        print('--')
-        print(nodes_with_no_input_edge)
-        print(letters_with_no_input_edge)
-        print(id_to_letter)
         adjacency_list = [[] for _ in range(len(letters_set))]
+        town_edge_name_mappings = {letter_id: {} for letter_id in id_to_letter.keys()}
         for line in inp_file:
             town = line.strip()
             town_start_id = letter_to_id[town[0].lower()]
             town_end_id = letter_to_id[town[-1].lower()]
             adjacency_list[town_start_id].append(town_end_id)
-    print('aa', id_to_letter)
-    print(adjacency_list)
+            add_town_name(town_edge_name_mappings, town_start_id, town_end_id, town)
     towns_sequence = find_towns_sequence(adjacency_list, nodes_with_no_input_edge)
     if towns_sequence[0] == -1:
         print("No solution")
@@ -108,7 +85,8 @@ def main():
         towns_sequence.reverse()
         print("Solution exists:")
         print("Solution:")
-        print(" -> ".join((str(t) for t in towns_sequence)))
+        for i in range(len(towns_sequence) - 1):
+            print(town_edge_name_mappings[towns_sequence[i]][towns_sequence[i + 1]].pop())
 
 
 if __name__ == '__main__':
