@@ -55,7 +55,7 @@ def add_town_name(town_edge_name_mappings, town_start_id, town_end_id, town_name
 
 
 def main():
-    with open("towns_input_with_cycle.txt", 'r', encoding="utf-8") as inp_file:
+    with open("towns_input_bad.txt", 'r', encoding="utf-8") as inp_file:
         letters_set = set()
         letters_with_input_edge = set()
         for line in inp_file:
