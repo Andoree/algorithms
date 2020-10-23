@@ -1,6 +1,15 @@
 import numpy as np
 import random
 
+
+class Edge:
+    def __init__(self, node_1, node_2):
+        self.old_node_1 = node_1
+        self.old_node_2 = node_2
+        self.current_node_1 = None
+        self.current_node_2 = None
+
+
 def squeeze_graph(adjacency_matrix):
     num_vertices = len(adjacency_matrix)
     not_squeezed_vertices = set((i for i in range(num_vertices)))
@@ -21,29 +30,24 @@ def squeeze_graph(adjacency_matrix):
                 adjacency_matrix[j][new_vertex] += edge_multiplicity
 
 
-
-
 def main():
     input_path = r'temp/10.txt'
-    input_list = []
+    adjacency_lists = []
     with open(input_path, 'r', encoding="utf-8") as inp_file:
         line = inp_file.readline().strip()
         attrs = line.split()
         num_vertices, num_edges = int(attrs[0]), int(attrs[1])
         for i in range(num_vertices):
             line = inp_file.readline().strip()
-            edges = [int(x) for x in line.split()]
-            input_list.append(edges)
+            edge_multiplicities_list = [int(x) for x in line.split()]
+            for node_id, node_multiplicity in enumerate(edge_multiplicities_list):
+                pass
+            adjacency_lists.append(edge_multiplicities_list)
         # print(input_list)
-        adjacency_matrix = np.array(input_list)
+        adjacency_matrix = np.array(adjacency_lists)
     adjacency_matrix_copy = adjacency_matrix.copy()
     adjacency_matrix[0][0] = 100
     print(adjacency_matrix_copy)
-
-
-
-
-
 
 
 if __name__ == '__main__':
