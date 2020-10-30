@@ -56,7 +56,7 @@ def squeeze_graph(adjacency_lists):
 
 def main():
     inputs_dir = r'temp/'
-    for fname in os.listdir(inputs_dir):
+    for fname in sorted(os.listdir(inputs_dir)):
         input_path = os.path.join(inputs_dir, fname)
         with open(input_path, 'r', encoding="utf-8") as inp_file:
             line = inp_file.readline().strip()
@@ -71,7 +71,7 @@ def main():
                     for j in range(node_multiplicity):
                         edge = Edge(vertex_id_1, vertex_id_2)
                         adjacency_lists[vertex_id_1].append(edge)
-        num_tries = num_vertices * 3
+        num_tries = num_vertices * 2
 
         minimum_cut_length = float('inf')
         minimum_cut_edges = []
