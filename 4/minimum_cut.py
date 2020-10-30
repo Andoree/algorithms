@@ -71,7 +71,7 @@ def main():
                     for j in range(node_multiplicity):
                         edge = Edge(vertex_id_1, vertex_id_2)
                         adjacency_lists[vertex_id_1].append(edge)
-        num_tries = num_vertices * 4
+        num_tries = num_vertices * 3
 
         minimum_cut_length = float('inf')
         minimum_cut_edges = []
