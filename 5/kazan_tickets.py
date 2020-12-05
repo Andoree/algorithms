@@ -4,6 +4,7 @@ import numpy as np
 
 factorials_memory = [1]
 
+
 def factorial(n):
     if len(factorials_memory) <= n:
         for i in range(len(factorials_memory), n + 1):
@@ -12,7 +13,14 @@ def factorial(n):
     return factorials_memory[n]
 
 
-def is_integers_list_splitable(numbers_list):
+def is_integers_list_splitable(numbers_list: list):
+    """
+    Estimates whether a lsit of integers can be split into two
+    subsets with equal sums
+    :param numbers_list: List of integers
+    :return: Boolean: Is a list of integers can be split into two
+    subsets with equal sums of elements
+    """
     list_length = len(numbers_list)
     list_sum = sum(numbers_list)
 
@@ -32,11 +40,13 @@ def is_integers_list_splitable(numbers_list):
     return solution_matrix[solution_matrix.shape[0] - 1][solution_matrix.shape[1] - 1]
 
 
-def main():
-    ticket_length = 6
+def find_number_of_kazan_tickets(ticket_length):
+    """
+    Calculates the number of Kazan tickets of length ticket_length
+    :param ticket_length: Length of tickets
+    :return: Number of Kazan tickets of the given length
+    """
     num_tickets = 0
-    start_time = time.time()
-
     for num_0s in range(ticket_length + 1):
         for num_1s in range(ticket_length - num_0s + 1):
             for num_2s in range(ticket_length - (num_0s + num_1s) + 1):
@@ -62,6 +72,17 @@ def main():
                                             for multiplicity in ticket_digit_counts:
                                                 num_permutations = num_permutations // factorial(multiplicity)
                                             num_tickets += num_permutations
+    return num_tickets
+
+
+def main():
+    ticket_length = int(input("Enter tickets length"))
+    start_time = time.time()
+    num_tickets = find_number_of_kazan_tickets(ticket_length)
+    """
+    499959437775564 - number of tickets
+    400.02 - time elapsed(seconds)
+    """
     print(num_tickets)
     print(f"{time.time() - start_time:.2f}")
 
